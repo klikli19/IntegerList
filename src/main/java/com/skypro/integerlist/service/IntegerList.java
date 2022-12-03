@@ -51,7 +51,7 @@ public interface IntegerList {
     // Вернуть элемент или исключение,
     // если выходит за рамки фактического
     // количества элементов.
-    String get(int index);
+    Integer get(int index);
 
     // Сравнить текущий список с другим.
     // Вернуть true/false или исключение,
