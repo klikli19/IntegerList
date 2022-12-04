@@ -1,15 +1,15 @@
 package com.skypro.integerlist.service;
 import com.skypro.integerlist.exception.*;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class IntegerService implements IntegerList{
-    private final Integer[] integers;
+    private  Integer[] integers;
     private int size;
 
     public IntegerService(int size) {
         this.integers = new Integer[size];
     }
-
 
     @Override
     public Integer add(Integer item) {
@@ -75,6 +75,9 @@ public class IntegerService implements IntegerList{
 
     @Override
     public boolean contains(Integer item) {
+        if (binarySearch(integers, item) != -1) {
+            return true;
+        }
         return false;
     }
 
@@ -141,5 +144,62 @@ public class IntegerService implements IntegerList{
     @Override
     public Integer[] toArray() {
         return Arrays.copyOf(integers, size);
+    }
+
+    private static void swapElements(Integer[] integers, int index1, int index2) {
+        int tmp = integers[index1];
+        integers[index1] = integers[index2];
+        integers[index2] = tmp;
+    }
+
+    public void sortBubble(Integer[] integers) {
+        for (int i = 0; i < integers.length - 1; i++) {
+            for (int j = 0; j < integers.length - 1 - i; j++) {
+                if (integers[j] > integers[j + 1]) {
+                    swapElements(integers, j, j + 1);
+                }
+            }
+        }
+    }
+    @Override
+    public void sortSelection(Integer[] integers) {
+        for (int i = 0; i < integers.length - 1; i++) {
+            int minElementIndex = i;
+            for (int j = i + 1; j < integers.length; j++) {
+                if (integers[j] < integers[minElementIndex]) {
+                    minElementIndex = j;
+                }
+            }
+            swapElements(integers, i, minElementIndex);
+        }
+    }
+
+    public void sortInsertion(Integer[] integers) {
+        for (int i = 1; i < integers.length; i++) {
+            int temp = integers[i];
+            int j = i;
+            while (j > 0 && integers[j - 1] >= temp) {
+                integers[j] = integers[j - 1];
+                j--;
+            }
+            integers[j] = temp;
+        }
+    }
+    private static int binarySearch(Integer[] integers, Integer item) {
+        int left = 0;
+        int right = integers.length - 1;
+        while (left <= right) {
+            int middle = (left + right) / 2;
+            int current = integers[middle];
+
+            if (current == item) {
+                return middle;
+            } else if (current < item) {
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return -1;
     }
 }
