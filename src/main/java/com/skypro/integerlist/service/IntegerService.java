@@ -13,11 +13,11 @@ public class IntegerService implements IntegerList{
 
     @Override
     public Integer add(Integer item) {
-        if (size >= integers.length) {
-            throw new FullListException("Массив заполнен.");
-        }
         if (item == null) {
             throw new InCorrectElementException("Вы ввели пустую строку");
+        }
+        if (size >= integers.length) {
+            grow();
         }
         integers[size] = item;
         size++;
@@ -146,7 +146,28 @@ public class IntegerService implements IntegerList{
         return Arrays.copyOf(integers, size);
     }
 
-    private static void swapElements(Integer[] integers, int index1, int index2) {
+    @Override
+    public  void mergeSort(Integer[] integers) {
+        if (integers.length < 2) {
+            return;
+        }
+        int mid = integers.length / 2;
+        Integer[] left = new Integer[mid];
+        Integer[] right = new Integer[integers.length - mid];
+
+        System.arraycopy(integers, 0, left, 0, left.length);
+        System.arraycopy(integers, mid, right, 0, right.length);
+
+        mergeSort(left);
+        mergeSort(right);
+
+        merge(integers, left, right);
+    }
+
+    private void grow() {
+        integers = Arrays.copyOf(integers, (int) (integers.length * 1.5));
+    }
+    private void swapElements(Integer[] integers, int index1, int index2) {
         int tmp = integers[index1];
         integers[index1] = integers[index2];
         integers[index2] = tmp;
@@ -161,7 +182,7 @@ public class IntegerService implements IntegerList{
             }
         }
     }
-    @Override
+
     public void sortSelection(Integer[] integers) {
         for (int i = 0; i < integers.length - 1; i++) {
             int minElementIndex = i;
@@ -202,4 +223,24 @@ public class IntegerService implements IntegerList{
         }
         return -1;
     }
+    public void merge(Integer[] integers, Integer[] left, Integer[] right) {
+
+        int mainP = 0;
+        int leftP = 0;
+        int rightP = 0;
+        while (leftP < left.length && rightP < right.length) {
+            if (left[leftP] <= right[rightP]) {
+                integers[mainP++] = left[leftP++];
+            } else {
+                integers[mainP++] = right[rightP++];
+            }
+        }
+        while (leftP < left.length) {
+            integers[mainP++] = left[leftP++];
+        }
+        while (rightP < right.length) {
+            integers[mainP++] = right[rightP++];
+        }
+    }
+
 }

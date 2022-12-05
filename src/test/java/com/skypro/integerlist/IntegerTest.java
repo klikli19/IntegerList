@@ -108,6 +108,11 @@ public class IntegerTest {
     public void sortSelection() {
         Integer[] list = {TEST, TEST_2, TEST_3, TEST_4};
         integerService.sortSelection(list);
+    }
 
+    @Test
+    public void mergeSort() {
+        Integer[] list = {TEST, TEST_2, TEST_3, TEST_4};
+        integerService.mergeSort(list);
     }
 }
